@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.hellofx.ui.theme.test.TestLoginScene"
+      prefHeight="400.0" prefWidth="600.0">
+    <VBox id="leftFrame">
+<!--        <HBox id="huster"></HBox>-->
+<!--        <VBox id="bluemoon"></VBox>-->
+<!--        <VBox id="loginForm"></VBox>-->
+<!--        <VBox id="statusContainer"></VBox>-->
+<!--        <HBox id="buttonContainer"></HBox>-->
+<!--        <HBox id="shutDownContainer"></HBox>-->
+    </VBox>
+    <StackPane id="rightFrame"></StackPane>
+</HBox>

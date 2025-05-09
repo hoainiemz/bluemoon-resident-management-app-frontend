@@ -1,0 +1,135 @@
+.root {
+    -fx-font-size: 16pt;
+    -fx-font-family: "Roboto";
+}
+
+#leftFrame {
+    -fx-background-color: rgba(248,248,248,255);
+}
+
+#rightFrame {
+    -fx-background-color: rgba(253,253,253,255);
+}
+
+#huster {
+    -fx-font-size: 20;
+}
+
+#huster Text {
+    -fx-fill: black;
+    -fx-background-color: green;
+}
+
+#bluemoon Image {
+    -fx-border-insets: 10px;
+}
+
+#bluemoon {
+    -fx-font-size: 35;
+    /*-fx-background-color: blue;*/
+}
+
+#bluemoon Text {
+    -fx-fill: black;
+}
+
+.login-text-field {
+    /*-fx-background-color: yellow;*/
+    -fx-border-color: #9ab0c2;
+    -fx-border-radius: 5px;
+}
+
+.login-text-field TextField {
+    -fx-background-color: rgba(248,248,248,255);
+    -fx-prompt-text-fill: #9ab0c2;
+    -fx-text-fill: #9ab0c2;
+}
+
+.login-text-field PasswordField {
+    -fx-background-color: rgba(248,248,248,255);
+    -fx-prompt-text-fill: #9ab0c2;
+    -fx-text-fill: #9ab0c2;
+}
+
+#statusContainer Text {
+    -fx-font-size: 15px;
+    -fx-fill: red;
+}
+.login-button {
+    -fx-background-color: #1a8cff; /* Bright blue color */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 30px;
+    -fx-background-radius: 30px; /* Rounded corners */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);
+    -fx-cursor: hand;
+    -fx-translate-y: 20px;
+}
+
+.login-button:hover {
+    -fx-background-color: #0066cc; /* Darker blue on hover */
+}
+
+.login-button:pressed {
+    -fx-background-color: #0052a3; /* Even darker when pressed */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 3, 0, 0, 1);
+}
+
+.register-button {
+    -fx-background-color: transparent; /* Bright blue color */
+    -fx-text-fill: #9ab0c2;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 30px;
+    -fx-background-radius: 30px; /* Rounded corners */
+    /*-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 2);*/
+    -fx-translate-y: 20px;
+    -fx-cursor: hand;
+}
+
+.register-button:pressed {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 3, 0, 0, 1);
+}
+
+#leftFrame {
+    /*-fx-background-color: red;*/
+    /*-fx-border-color: transparent transparent transparent black; !* top, right, bottom, left *!*/
+    /*-fx-border-width: 0 20px 0 0; !* top, right, bottom, left *!*/
+    -fx-border-color: transparent rgba(237,237,237,255) transparent transparent;
+    -fx-border-width: 0 2px 0 0;
+}
+
+
+.tweet-card {
+    -fx-padding: 25px;
+    -fx-background-radius: 20px;
+    /*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 10, 0.5, 0, 2);*/
+}
+
+.quote-icon {
+    -fx-font-size: 150px;
+    -fx-text-fill: lightgray;
+}
+
+.tweet-text {
+    -fx-font-size: 50px;
+    -fx-text-fill: rgba(27,30,32,255);
+    -fx-padding: 50px 0 10px 0;
+}
+
+.username {
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(230,230,230,255);
+}
+
+
+.quote-icon {
+    -fx-cursor: hand;
+}
+
+.right-sub-frame {
+    /*-fx-background-color: red;*/
+    -fx-padding: 0 0 0 0;
+    -fx-font-family: 'Quicksand';
+}

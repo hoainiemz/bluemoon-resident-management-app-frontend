@@ -1,0 +1,6 @@
+
+.big-text Text {
+    -fx-fill: black;
+    -fx-font-size: 24pt;
+    -fx-font-weight: bold;
+}

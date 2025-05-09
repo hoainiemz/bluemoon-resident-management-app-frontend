@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="org.example.hellofx.ui.theme.defaulttheme.LoginScene"
+      prefHeight="400.0" prefWidth="600.0">
+    <HBox id="topBar">
+        <HBox id="topMenu">
+            <HBox id="logoContainer"></HBox>
+        </HBox>
+        <HBox id="topProfile">
+            <Button id="notificationButton"></Button>
+            <HBox id="profileContainer"></HBox>
+        </HBox>
+    </HBox>
+    <HBox id="container">
+        <VBox id="menuContainer">
+        </VBox>
+        <StackPane id="content"></StackPane>
+    </HBox>
+</VBox>
