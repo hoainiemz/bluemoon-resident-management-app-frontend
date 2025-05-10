@@ -55,4 +55,7 @@ public class ResidentService {
         restTemplate.delete(AppConfig.backendUrl + "/resident/deleteresidentbyid?id={id}", id);
     }
 
+    public List<Resident> residentSearchResidentsByFilters(Integer residentId, String houseNameFilter, String roleFilter, String searchFilter) {
+        return Arrays.asList(restTemplate.getForObject(AppConfig.backendUrl + "/resident/residentsearchresidentsbyfilters?residentId={residentId}&houseNameFilter={houseNameFilter}&roleFilter={roleFilter}&searchFilter={searchFilter}", Resident[].class, residentId, houseNameFilter, roleFilter, searchFilter));
+    }
 }

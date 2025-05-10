@@ -67,7 +67,12 @@ public class ResidentScene implements ThemeScene {
         ComboBox<AccountType> roleFilter = ((ComboBox<AccountType>) scene.lookup("#roleFilter"));
         TextField searchFilter = ((TextAndTextField) scene.lookup("#searchFilter")).getTextField();
         TableView<Resident> table = (TableView) scene.lookup("#resident-table");
-        masterData = controller.getResidentsByFilters(houseIdFilter.getValue(), roleFilter.getValue().toString(), searchFilter.getText());
+        if (controller.getProfile().getRole() != AccountType.Resident) {
+            masterData = controller.getResidentsByFilters(houseIdFilter.getValue(), roleFilter.getValue().toString(), searchFilter.getText());
+        }
+        else {
+            masterData = controller.residentSearchResidentsByFilters(controller.getResident().getResidentId(), houseIdFilter.getValue(), roleFilter.getValue().toString(), searchFilter.getText());
+        }
         resetPagination();
     }
 
@@ -126,7 +131,7 @@ public class ResidentScene implements ThemeScene {
             });
 //        }
         filter.getChildren().add(new Separator(Orientation.VERTICAL));
-        filter.getChildren().add(new TextAndTextField("Theo từ khóa: ", null, "Enter the search keyword", "searchFilter", true));
+        filter.getChildren().add(new TextAndTextField("Theo từ khóa: ", "", "Enter the search keyword", "searchFilter", true));
 
 
         ((ComboBox<String>) scene.lookup("#houseIdFilter")).setOnAction(event -> {

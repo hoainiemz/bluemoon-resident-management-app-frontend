@@ -59,6 +59,10 @@ public class ResidentController {
         return FXCollections.observableArrayList(residentService.findResidentsByFilters(houseNameFilter, roleFilter, searchFilter));
     }
 
+    public ObservableList<Resident> residentSearchResidentsByFilters(Integer residentId, String houseNameFilter, String roleFilter, String searchFilter) {
+        return FXCollections.observableArrayList(residentService.residentSearchResidentsByFilters(residentId, houseNameFilter, roleFilter, searchFilter));
+    }
+
     public Scene getResidentInfoScene(Scene scene, Integer residentId) {
         UserInformationScene theme = SpringBootFxApplication.context.getBean(UserInformationScene.class);
         Account profile = accountService.findAccountByUserId(residentId);
