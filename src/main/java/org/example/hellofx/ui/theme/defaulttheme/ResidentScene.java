@@ -205,11 +205,11 @@ public class ResidentScene implements ThemeScene {
         var col6 = new TableColumn<Resident, HBox>("Thao tác");
         col6.setCellValueFactory(
                 c -> {
-                    FontIcon pencilIcon = new FontIcon(MaterialDesignP.PENCIL);
+                    FontIcon pencilIcon = new FontIcon("mdi2p-pencil");
                     pencilIcon.setIconSize(16);        // size 16px
                     pencilIcon.setStyle("-fx-icon-color: " + "#5fa7fc" + ";");
 
-                    FontIcon trashIcon = new FontIcon(MaterialDesignT.TRASH_CAN);
+                    FontIcon trashIcon = new FontIcon("mdi2t-trash-can");
                     trashIcon.setIconSize(16);
                     trashIcon.setStyle("-fx-icon-color: " + "#fa4547" + ";");
 
