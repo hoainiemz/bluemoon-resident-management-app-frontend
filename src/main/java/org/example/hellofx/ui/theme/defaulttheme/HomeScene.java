@@ -115,6 +115,23 @@ public class HomeScene implements ThemeScene {
         notificationButton.setPrefHeight(topBar.getPrefHeight());
         notificationButton.setPrefWidth(topBar.getPrefHeight());
         notiIcon.getStyleClass().add("notification-button-icon");
+        int numNoti = controller.getNumNoti();
+        StackPane notiStack = (StackPane) scene.lookup("#notiStack");
+
+        Label badge = new Label(String.valueOf(numNoti));
+        badge.setId("numNoti");
+        badge.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 15px; -fx-font-weight: bold; -fx-background-radius: 50%; -fx-cursor: hand;");
+        badge.setPadding(new Insets(2));
+        badge.setMinSize(Label.USE_PREF_SIZE, Label.USE_PREF_SIZE);
+        badge.setAlignment(Pos.CENTER);
+        notiStack.getChildren().add(badge);
+        StackPane.setAlignment(badge, Pos.TOP_RIGHT);
+        StackPane.setMargin(badge, new Insets(10, 10, 0, 0)); // điều chỉnh vị trí tùy icon
+        badge.setPadding(new Insets(0, 5, 2, 5));
+        badge.setVisible(numNoti > 0);
+        badge.setOnMouseClicked(event -> {
+            notificationButton.fire();
+        });
         // top profile
         HBox profileContainer = (HBox) scene.lookup("#profileContainer");
         topProfile.setAlignment(Pos.CENTER_RIGHT);
@@ -418,6 +435,10 @@ public class HomeScene implements ThemeScene {
     }
 
     private void updateNotificationList() {
+        int numNoti = controller.getNumNoti();
+        Label badge = (Label) scene.lookup("#numNoti");
+        badge.setText(String.valueOf(numNoti));
+        badge.setVisible(numNoti > 0);
         notiList.getChildren().clear();
         if (controller.getProfile().getRole() == AccountType.Resident) {
             List<NotificationItem> ls = controller.getNotificationList(controller.getResident().getResidentId(), unReadNoti.isSelected());

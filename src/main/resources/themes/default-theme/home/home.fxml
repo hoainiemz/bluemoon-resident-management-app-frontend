@@ -11,7 +11,7 @@
             <HBox id="logoContainer"></HBox>
         </HBox>
         <HBox id="topProfile">
-            <Button id="notificationButton"></Button>
+            <StackPane id="notiStack"><Button id="notificationButton"></Button></StackPane>
             <HBox id="profileContainer"></HBox>
         </HBox>
     </HBox>

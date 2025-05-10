@@ -136,4 +136,8 @@ public class HomeController{
     public void dashBoardClicked() {
         JavaFxApplication.showThemeScene(DashboardScene.class);
     }
+
+    public int getNumNoti() {
+        return noticementService.countUnwatchedByResidentId(getResident().getResidentId());
+    }
 }
