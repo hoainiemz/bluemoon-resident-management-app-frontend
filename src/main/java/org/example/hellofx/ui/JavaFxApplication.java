@@ -16,6 +16,7 @@ import org.example.hellofx.ui.theme.defaulttheme.LoginScene;
 import org.example.hellofx.ui.theme.defaulttheme.NotificationInformationScene;
 import org.example.hellofx.ui.theme.defaulttheme.UserInformationScene;
 import org.example.hellofx.utils.ScreenUtils;
+import org.kordamp.ikonli.materialdesign2.MaterialDesignP;
 
 public class JavaFxApplication extends Application {
     private static Stage currentStage;
@@ -30,6 +31,7 @@ public class JavaFxApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        System.out.println(MaterialDesignP.PENCIL.getDescription());
         Font.loadFont(
                 getClass().getResourceAsStream("/fonts/materialdesignicons-webfont.ttf"), 12
         );
