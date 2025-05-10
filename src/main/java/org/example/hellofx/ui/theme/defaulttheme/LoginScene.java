@@ -279,7 +279,11 @@ public class LoginScene extends Notificable implements ThemeScene {
         TextField tf1 = (TextField) scene.lookup("#username-field");
         PasswordField tf2 = (PasswordField) scene.lookup("#password-field");;
 
-
+        scene.setOnKeyPressed(event -> {
+           if (event.getCode() == KeyCode.ENTER) {
+               loginButton.fire();
+           }
+        });
 
         tf1.setText("admin");
         tf2.setText("admin");

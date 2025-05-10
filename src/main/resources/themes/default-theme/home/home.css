@@ -628,3 +628,53 @@ VerticleTextAndTextArea .editable-text-field {
     -fx-icon-color: #ffa8d2;
     -fx-icon-code: "mdi-note";
 }
+
+.public-dashboard {
+    -fx-background-radius: 30;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 20, 0.5, 0, 5);
+}
+
+#welcomeText {
+    -fx-font-size: 36px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 4, 0.2, 0, 2);
+}
+
+.subText {
+    -fx-font-size: 20px;
+    -fx-text-fill: white;
+    -fx-font-weight: normal;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-opacity: 0.9;
+}
+
+/* Thẻ container chính */
+.my-item {
+    -fx-background-color: linear-gradient(to bottom right, #ffffff, #f4f4ff);
+    -fx-background-radius: 20;
+    -fx-padding: 20;
+    -fx-spacing: 15;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0.2, 0, 2);
+    -fx-alignment: TOP_CENTER;
+}
+
+/* Tên item (ví dụ: "User Data") */
+.my-item-name {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1b0036;
+    -fx-alignment: center-left;
+}
+
+/* Nút 'View' */
+.my-item-button {
+    -fx-background-color: #5f00d8;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-cursor: hand;
+    -fx-padding: 8 20 8 20;
+}

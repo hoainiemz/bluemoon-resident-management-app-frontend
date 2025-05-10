@@ -48,7 +48,6 @@ public class JavaFxApplication extends Application {
         currentStage.setFullScreenExitKeyCombination(null); // Disable ESC key for exit
 
         currentStage.show();
-        currentStage.show();
     }
 
     public static <T> void showThemeScene(Class<T> clazz){

@@ -1,0 +1,52 @@
+/* Áp dụng cho Calendar */
+.calendar {
+    -color-date-border: #007BFF;              /* viền ô ngày */
+    -color-date-month-year-bg: #007BFF;       /* nền tiêu đề tháng */
+    -color-date-month-year-fg: white;         /* chữ tiêu đề tháng */
+
+    /*-fx-border-color: #007BFF;*/
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+
+    -fx-font-size: 13px;
+}
+
+/* Cell ngày */
+.calendar .day-cell {
+    -fx-pref-width: 30px;
+    -fx-pref-height: 26px;
+    -fx-alignment: center;
+}
+
+/* Ngày được chọn */
+.calendar .day-cell:selected {
+    -fx-background-color: #007BFF;
+    -fx-text-fill: white;
+    -fx-background-radius: 4;
+}
+
+/* Ngày thuộc tháng khác */
+.calendar .day-cell:disabled {
+    -fx-text-fill: #999999;
+}
+
+/* Header: tiêu đề tháng + điều hướng */
+.calendar .month-year-pane {
+    -fx-background-color: -color-date-month-year-bg;
+    -fx-text-fill: -color-date-month-year-fg;
+    -fx-padding: 10;
+    -fx-font-weight: bold;
+}
+
+/* Nút điều hướng tháng (mũi tên) */
+.calendar .month-year-pane .button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+}
+
+/* Tên thứ (Sun, Mon,...) */
+.calendar .weekday-cell {
+    -fx-font-weight: bold;
+    -fx-text-fill: #444;
+}

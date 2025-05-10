@@ -200,7 +200,6 @@ public class HomeScene implements ThemeScene {
             Platform.exit();
         });
         profileDropDownContent.setPrefWidth(ScreenUtils.getScreenWidth() * 0.2);
-//        System.out.println(profileContainer.getLayoutBounds().getWidth());
 
         // container
         VBox menuContainer = (VBox) scene.lookup("#menuContainer");
@@ -222,6 +221,9 @@ public class HomeScene implements ThemeScene {
         Button dashBoard = new Button("Dashboard");
         dashBoard.getStyleClass().add("menu-main-button");
         dashBoardContainer.getChildren().addAll(dashBoard);
+        dashBoard.setOnAction(event -> {
+           controller.dashBoardClicked();
+        });
         // dan cu
         VBox danCuContainer = new VBox();
         Button danCu = new Button("Dân cư");
@@ -249,9 +251,6 @@ public class HomeScene implements ThemeScene {
         danhSachCanHo.getStyleClass().add("menu-sub-button");
         themCanHo.getStyleClass().add("menu-sub-button");
         canHoContainer.getChildren().addAll(canHo, danhSachCanHo);
-//        if (controller.getProfile().getRole() != AccountType.Resident) {
-//            canHoContainer.getChildren().addAll(themCanHo);
-//        }
         danhSachCanHo.setOnAction(event -> {
             controller.danhSachCanHoClicked();
         });

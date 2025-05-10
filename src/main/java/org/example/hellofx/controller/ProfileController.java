@@ -6,6 +6,7 @@ import org.example.hellofx.model.Resident;
 import org.example.hellofx.service.AccountService;
 import org.example.hellofx.service.ResidentService;
 import org.example.hellofx.ui.JavaFxApplication;
+import org.example.hellofx.ui.theme.defaulttheme.DashboardScene;
 import org.example.hellofx.ui.theme.defaulttheme.HomeScene;
 import org.example.hellofx.ui.theme.defaulttheme.LoginScene;
 import org.example.hellofx.ui.theme.defaulttheme.ResidentScene;
@@ -27,6 +28,7 @@ public class ProfileController{
         resident = residentService.findResidentByAccount(profile);
 //        System.out.println("Logged in with profile: " + profile);
         JavaFxApplication.showThemeScene(HomeScene.class);
+        JavaFxApplication.showThemeScene(DashboardScene.class);
     }
 
     public String getProfileNameRequest() {

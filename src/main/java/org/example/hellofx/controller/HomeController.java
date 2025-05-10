@@ -132,4 +132,8 @@ public class HomeController{
     public Feedback saveFeedback(Feedback feedback) {
         return feedbackService.save(feedback);
     }
+
+    public void dashBoardClicked() {
+        JavaFxApplication.showThemeScene(DashboardScene.class);
+    }
 }
