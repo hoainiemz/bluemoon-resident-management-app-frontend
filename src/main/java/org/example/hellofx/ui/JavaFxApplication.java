@@ -3,6 +3,7 @@ package org.example.hellofx.ui;
 import atlantafx.base.theme.PrimerLight;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.example.hellofx.SpringBootFxApplication;
@@ -29,6 +30,9 @@ public class JavaFxApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        Font.loadFont(
+                getClass().getResourceAsStream("/fonts/materialdesignicons-webfont.ttf"), 12
+        );
         Application.setUserAgentStylesheet(new PrimerLight().getUserAgentStylesheet());
         currentStage = stage;
 //        Application.setUserAgentStylesheet(new PrimerDark().getUserAgentStylesheet());
