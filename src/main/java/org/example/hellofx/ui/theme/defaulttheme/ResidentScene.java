@@ -34,8 +34,6 @@ import org.example.hellofx.ui.theme.defaulttheme.myhandmadenodes.TextAndTextFiel
 import org.example.hellofx.ui.theme.defaulttheme.myhandmadenodes.TextComboBox;
 import org.example.hellofx.utils.ScreenUtils;
 import org.kordamp.ikonli.javafx.FontIcon;
-import org.kordamp.ikonli.materialdesign2.MaterialDesignP;
-import org.kordamp.ikonli.materialdesign2.MaterialDesignT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -205,15 +203,13 @@ public class ResidentScene implements ThemeScene {
         var col6 = new TableColumn<Resident, HBox>("Thao tác");
         col6.setCellValueFactory(
                 c -> {
-                    FontIcon pencilIcon = new FontIcon("mdi2p-pencil");
-                    pencilIcon.setIconSize(16);        // size 16px
-                    pencilIcon.setStyle("-fx-icon-color: " + "#5fa7fc" + ";");
-
-                    FontIcon trashIcon = new FontIcon("mdi2t-trash-can");
-                    trashIcon.setIconSize(16);
-                    trashIcon.setStyle("-fx-icon-color: " + "#fa4547" + ";");
-
+                    FontIcon pencilIcon = new FontIcon();
                     Button btnEdit   = new Button("", pencilIcon);
+                    pencilIcon.getStyleClass().add("pencil-icon");
+
+
+                    FontIcon trashIcon = new FontIcon();
+                    trashIcon.getStyleClass().add("delete-icon");
                     Button btnDelete = new Button("", trashIcon);
 
                     btnEdit.getStyleClass().add("btn-edit");

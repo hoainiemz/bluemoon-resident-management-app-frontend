@@ -30,7 +30,7 @@ import org.example.hellofx.ui.theme.defaulttheme.myhandmadenodes.TextAndTextFiel
 import org.example.hellofx.ui.theme.defaulttheme.myhandmadenodes.TextComboBox;
 import org.example.hellofx.utils.ScreenUtils;
 import org.kordamp.ikonli.javafx.FontIcon;
-import org.kordamp.ikonli.materialdesign2.*;
+import org.kordamp.ikonli.materialdesign.MaterialDesign;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -123,11 +123,11 @@ public class NotificationManagementScene implements ThemeScene {
         });
 
         List<Badge> badges = new ArrayList<>();
-        badges.add(new Badge("All", MaterialDesignF.FLAG_OUTLINE, Color.BLACK));
-        badges.add(new Badge("Info", MaterialDesignI.INFORMATION_OUTLINE, Color.valueOf("#0969da")));
-        badges.add(new Badge("Success", MaterialDesignC.CHECK_CIRCLE_OUTLINE, Color.valueOf("#1f823b")));
-        badges.add(new Badge("Warning", MaterialDesignA.ALERT_OUTLINE, Color.valueOf("#9a6801")));
-        badges.add(new Badge("Danger", MaterialDesignA.ALERT_CIRCLE_OUTLINE, Color.valueOf("#d2313c")));
+        badges.add(new Badge("All", MaterialDesign.MDI_FLAG_OUTLINE, Color.BLACK));
+        badges.add(new Badge("Info", MaterialDesign.MDI_INFORMATION_OUTLINE, Color.valueOf("#0969da")));
+        badges.add(new Badge("Success", MaterialDesign.MDI_CHECK_CIRCLE_OUTLINE, Color.valueOf("#1f823b")));
+        badges.add(new Badge("Warning", MaterialDesign.MDI_ALERT_OUTLINE, Color.valueOf("#9a6801")));
+        badges.add(new Badge("Danger", MaterialDesign.MDI_ALERT_CIRCLE_OUTLINE, Color.valueOf("#d2313c")));
         ComboBox<Badge> notiType = new ComboBox<>(FXCollections.observableArrayList(badges));
         notiType.setButtonCell(new BadgeCell()); // Set button appearance
         notiType.setCellFactory(c -> new BadgeCell()); // Set dropdown appearance
@@ -193,13 +193,11 @@ public class NotificationManagementScene implements ThemeScene {
         var col4 = new TableColumn<NotificationItem, HBox>("Thao tác");
         col4.setCellValueFactory(
                 c -> {
-                    FontIcon pencilIcon = new FontIcon(MaterialDesignP.PENCIL);
-                    pencilIcon.setIconSize(16);        // size 16px
-                    pencilIcon.setStyle("-fx-icon-color: " + "#5fa7fc" + ";");
+                    FontIcon pencilIcon = new FontIcon();
+                    pencilIcon.getStyleClass().add("pencil-icon");
 
-                    FontIcon trashIcon = new FontIcon(MaterialDesignT.TRASH_CAN);
-                    trashIcon.setIconSize(16);
-                    trashIcon.setStyle("-fx-icon-color: " + "#fa4547" + ";");
+                    FontIcon trashIcon = new FontIcon();
+                    trashIcon.getStyleClass().add("delete-icon");
 
                     Button btnEdit   = new Button("", pencilIcon);
                     Button btnDelete = new Button("", trashIcon);

@@ -29,9 +29,7 @@ import org.example.hellofx.model.enums.NotificationType;
 import org.example.hellofx.model.enums.ValidationState;
 import org.example.hellofx.ui.theme.ThemeScene;
 import org.example.hellofx.ui.theme.defaulttheme.myhandmadenodes.*;
-import org.kordamp.ikonli.materialdesign2.MaterialDesignA;
-import org.kordamp.ikonli.materialdesign2.MaterialDesignC;
-import org.kordamp.ikonli.materialdesign2.MaterialDesignI;
+import org.kordamp.ikonli.materialdesign.MaterialDesign;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -131,10 +129,10 @@ public class NotificationCreationScene extends Notificable implements ThemeScene
 //        notiType.getSelectionModel().select(NotificationType.Info);
 //        notiType.setEditable(false);
         List<Badge> badges = new ArrayList<>();
-        badges.add(new Badge("Info", MaterialDesignI.INFORMATION_OUTLINE, Color.valueOf("#0969da")));
-        badges.add(new Badge("Success", MaterialDesignC.CHECK_CIRCLE_OUTLINE, Color.valueOf("#1f823b")));
-        badges.add(new Badge("Warning", MaterialDesignA.ALERT_OUTLINE, Color.valueOf("#9a6801")));
-        badges.add(new Badge("Danger", MaterialDesignA.ALERT_CIRCLE_OUTLINE, Color.valueOf("#d2313c")));
+        badges.add(new Badge("Info", MaterialDesign.MDI_INFORMATION_OUTLINE, Color.valueOf("#0969da")));
+        badges.add(new Badge("Success", MaterialDesign.MDI_CHECK_CIRCLE_OUTLINE, Color.valueOf("#1f823b")));
+        badges.add(new Badge("Warning", MaterialDesign.MDI_ALERT_OUTLINE, Color.valueOf("#9a6801")));
+        badges.add(new Badge("Danger", MaterialDesign.MDI_ALERT_CIRCLE_OUTLINE, Color.valueOf("#d2313c")));
         ComboBox<Badge> notiType = new ComboBox<>(FXCollections.observableArrayList(badges));
         notiType.setButtonCell(new BadgeCell()); // Set button appearance
         notiType.setCellFactory(c -> new BadgeCell()); // Set dropdown appearance

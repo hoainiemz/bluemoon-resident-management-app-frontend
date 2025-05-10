@@ -28,10 +28,7 @@ import org.example.hellofx.model.enums.AccountType;
 import org.example.hellofx.ui.theme.ThemeScene;
 import org.example.hellofx.utils.ScreenUtils;
 import org.kordamp.ikonli.javafx.FontIcon;
-import org.kordamp.ikonli.materialdesign2.MaterialDesignA;
-import org.kordamp.ikonli.materialdesign2.MaterialDesignB;
-import org.kordamp.ikonli.materialdesign2.MaterialDesignC;
-import org.kordamp.ikonli.materialdesign2.MaterialDesignI;
+import org.kordamp.ikonli.materialdesign.MaterialDesign;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -113,7 +110,7 @@ public class HomeScene implements ThemeScene {
         logoContainer.setAlignment(Pos.CENTER_LEFT);
 
         Button notificationButton = (Button) scene.lookup("#notificationButton");
-        FontIcon notiIcon = new FontIcon(MaterialDesignB.BELL_RING_OUTLINE);
+        FontIcon notiIcon = new FontIcon(MaterialDesign.MDI_BELL_RING_OUTLINE);
         notificationButton.setGraphic(notiIcon);
         notificationButton.setPrefHeight(topBar.getPrefHeight());
         notificationButton.setPrefWidth(topBar.getPrefHeight());
@@ -435,19 +432,19 @@ public class HomeScene implements ThemeScene {
                 mess.getStyleClass().add("hand-hover");
                 switch (item.getType()) {
                     case "Info":
-                        mess.setGraphic(new FontIcon(MaterialDesignI.INFORMATION_OUTLINE));
+                        mess.setGraphic(new FontIcon(MaterialDesign.MDI_INFORMATION_OUTLINE));
                         mess.getStyleClass().add(Styles.ACCENT);
                         break;
                     case "Success":
-                        mess.setGraphic(new FontIcon(MaterialDesignC.CHECK_CIRCLE_OUTLINE));
+                        mess.setGraphic(new FontIcon(MaterialDesign.MDI_CHECK_CIRCLE_OUTLINE));
                         mess.getStyleClass().add(Styles.SUCCESS);
                         break;
                     case "Warning":
-                        mess.setGraphic(new FontIcon(MaterialDesignA.ALERT_OUTLINE));
+                        mess.setGraphic(new FontIcon(MaterialDesign.MDI_ALERT_OUTLINE));
                         mess.getStyleClass().add(Styles.WARNING);
                         break;
                     case "Danger":
-                        mess.setGraphic(new FontIcon(MaterialDesignA.ALERT_CIRCLE_OUTLINE));
+                        mess.setGraphic(new FontIcon(MaterialDesign.MDI_ALERT_CIRCLE_OUTLINE));
                         mess.getStyleClass().add(Styles.DANGER);
                         break;
                     default:
@@ -475,19 +472,19 @@ public class HomeScene implements ThemeScene {
                 mess.setTooltip(tooltip);
                 switch (item.getType()) {
                     case "Info":
-                        mess.setGraphic(new FontIcon(MaterialDesignI.INFORMATION_OUTLINE));
+                        mess.setGraphic(new FontIcon(MaterialDesign.MDI_INFORMATION_OUTLINE));
                         mess.getStyleClass().add(Styles.ACCENT);
                         break;
                     case "Success":
-                        mess.setGraphic(new FontIcon(MaterialDesignC.CHECK_CIRCLE_OUTLINE));
+                        mess.setGraphic(new FontIcon(MaterialDesign.MDI_CHECK_CIRCLE_OUTLINE));
                         mess.getStyleClass().add(Styles.SUCCESS);
                         break;
                     case "Warning":
-                        mess.setGraphic(new FontIcon(MaterialDesignA.ALERT_OUTLINE));
+                        mess.setGraphic(new FontIcon(MaterialDesign.MDI_ALERT_OUTLINE));
                         mess.getStyleClass().add(Styles.WARNING);
                         break;
                     case "Danger":
-                        mess.setGraphic(new FontIcon(MaterialDesignA.ALERT_CIRCLE_OUTLINE));
+                        mess.setGraphic(new FontIcon(MaterialDesign.MDI_ALERT_CIRCLE_OUTLINE));
                         mess.getStyleClass().add(Styles.DANGER);
                         break;
                     default:

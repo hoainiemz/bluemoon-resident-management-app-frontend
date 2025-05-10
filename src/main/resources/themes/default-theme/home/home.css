@@ -604,3 +604,27 @@ VerticleTextAndTextArea .editable-text-field {
 .table-maker-button:pressed {
     -fx-background-color: #ad6c79; /* Darker purple for pressed state */
 }
+
+.pencil-icon {
+    -fx-icon-size: 16px;
+    -fx-icon-color: #5fa7fc;
+    -fx-icon-code: "mdi-pencil";
+}
+
+.delete-icon {
+    -fx-icon-size: 16px;
+    -fx-icon-color: #fa4547;
+    -fx-icon-code: "mdi-delete";
+}
+
+.pay-icon {
+    -fx-icon-size: 16px;
+    -fx-icon-color: #a38215;
+    -fx-icon-code: "mdi-credit-card";
+}
+
+.receipt-icon {
+    -fx-icon-size: 16px;
+    -fx-icon-color: #ffa8d2;
+    -fx-icon-code: "mdi-note";
+}

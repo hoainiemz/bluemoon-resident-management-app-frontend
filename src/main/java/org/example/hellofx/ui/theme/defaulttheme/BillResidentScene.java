@@ -29,7 +29,6 @@ import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import org.example.hellofx.controller.BillResidentController;
 import org.example.hellofx.dto.PaymentProjectionDTO;
-import org.example.hellofx.model.Bill;
 import org.example.hellofx.model.InvoiceItem;
 import org.example.hellofx.ui.JavaFxApplication;
 import org.example.hellofx.ui.theme.ThemeScene;
@@ -38,7 +37,6 @@ import org.example.hellofx.ui.theme.defaulttheme.myhandmadenodes.TextComboBox;
 import org.example.hellofx.utils.QRUtil;
 import org.example.hellofx.utils.ScreenUtils;
 import org.kordamp.ikonli.javafx.FontIcon;
-import org.kordamp.ikonli.materialdesign2.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -249,21 +247,17 @@ public class BillResidentScene implements ThemeScene {
         var col6 = new TableColumn<PaymentProjectionDTO, HBox>("Thao tác");
         col6.setCellValueFactory(
                 c -> {
-                    FontIcon pencilIcon = new FontIcon(MaterialDesignP.PENCIL);
-                    pencilIcon.setIconSize(50);        // size 50px
-                    pencilIcon.setStyle("-fx-icon-color: " + "#5fa7fc" + ";");
+                    FontIcon pencilIcon = new FontIcon();
+                    pencilIcon.getStyleClass().add("pencil-icon");
 
-                    FontIcon trashIcon = new FontIcon(MaterialDesignT.TRASH_CAN);
-                    trashIcon.setIconSize(50);
-                    trashIcon.setStyle("-fx-icon-color: " + "#fa4547" + ";");
+                    FontIcon trashIcon = new FontIcon();
+                    trashIcon.getStyleClass().add("trash-icon");
 
-                    FontIcon payIcon = new FontIcon(MaterialDesignC.CREDIT_CARD_CHECK);
-                    payIcon.setIconSize(50);
-                    payIcon.setStyle("-fx-icon-color: " + "#a38215" + ";");
+                    FontIcon payIcon = new FontIcon();
+                    payIcon.getStyleClass().add("pay-icon");
 
-                    FontIcon receipt = new FontIcon(MaterialDesignN.NOTE);
-                    receipt.setIconSize(50);
-                    receipt.setStyle("-fx-icon-color: " + "#ffa8d2" + ";");
+                    FontIcon receipt = new FontIcon();
+                    receipt.getStyleClass().add("receipt-icon");
 
                     Button btnEdit   = new Button("", pencilIcon);
                     Button btnDelete = new Button("", trashIcon);

@@ -38,7 +38,6 @@ import org.example.hellofx.ui.theme.defaulttheme.myhandmadenodes.VerticleTextAnd
 import org.example.hellofx.ui.theme.defaulttheme.myhandmadenodes.VerticleTextAndTextField;
 import org.example.hellofx.utils.ScreenUtils;
 import org.kordamp.ikonli.javafx.FontIcon;
-import org.kordamp.ikonli.materialdesign2.MaterialDesignT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -177,9 +176,8 @@ public class VehicleScene extends Notificable implements ThemeScene {
         var col5 = new TableColumn<VehicleInfo, HBox>("Thao tác");
         col5.setCellValueFactory(
                 c -> {
-                    FontIcon trashIcon = new FontIcon(MaterialDesignT.TRASH_CAN);
-                    trashIcon.setIconSize(16);
-                    trashIcon.setStyle("-fx-icon-color: " + "#fa4547" + ";");
+                    FontIcon trashIcon = new FontIcon();
+                    trashIcon.getStyleClass().add("delete-icon");
 
                     Button btnDelete = new Button("", trashIcon);
 

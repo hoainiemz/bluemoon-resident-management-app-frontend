@@ -36,8 +36,6 @@ import org.example.hellofx.ui.theme.defaulttheme.myhandmadenodes.TextAndTextFiel
 import org.example.hellofx.ui.theme.defaulttheme.myhandmadenodes.TextComboBox;
 import org.example.hellofx.utils.ScreenUtils;
 import org.kordamp.ikonli.javafx.FontIcon;
-import org.kordamp.ikonli.materialdesign2.MaterialDesignP;
-import org.kordamp.ikonli.materialdesign2.MaterialDesignT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -277,13 +275,11 @@ public class BillManagementScene extends Notificable implements ThemeScene {
         var col5 = new TableColumn<Bill, HBox>("Thao tác");
         col5.setCellValueFactory(
                 c -> {
-                    FontIcon pencilIcon = new FontIcon(MaterialDesignP.PENCIL);
-                    pencilIcon.setIconSize(16);        // size 16px
-                    pencilIcon.setStyle("-fx-icon-color: " + "#5fa7fc" + ";");
+                    FontIcon pencilIcon = new FontIcon();
+                    pencilIcon.getStyleClass().add("pencil-icon");
 
-                    FontIcon trashIcon = new FontIcon(MaterialDesignT.TRASH_CAN);
-                    trashIcon.setIconSize(16);
-                    trashIcon.setStyle("-fx-icon-color: " + "#fa4547" + ";");
+                    FontIcon trashIcon = new FontIcon();
+                    trashIcon.getStyleClass().add("delete-icon");
 
                     Button btnEdit   = new Button("", pencilIcon);
                     Button btnDelete = new Button("", trashIcon);

@@ -281,8 +281,8 @@ public class LoginScene extends Notificable implements ThemeScene {
 
 
 
-//        tf1.setText("admin");
-//        tf2.setText("admin");
+        tf1.setText("admin");
+        tf2.setText("admin");
 //        tf1.setText("a");
 //        tf2.setText("a");
     }

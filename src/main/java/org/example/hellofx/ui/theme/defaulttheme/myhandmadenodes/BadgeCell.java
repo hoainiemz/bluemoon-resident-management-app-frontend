@@ -17,13 +17,11 @@ public class BadgeCell extends ListCell<Badge> {
         } else {
             // Create an icon
             FontIcon icon = null;
-            icon = new FontIcon(badge.icon());
-            if (badge.color() != null) {
-                icon.setIconColor(badge.color()); // Apply color to icon
-                icon.setFill(badge.color());
-//                icon.setStyle("-fx-icon-color: " + toHexString(badge.color()) + ";");
-                icon.setStyle("-fx-icon-color: " + toRgbString(badge.color()) + ";"); // Force text color with CSS
-            }
+            icon = new FontIcon();
+            icon.setStyle(
+                    "-fx-icon-color: " + toRgbString(badge.color()) + ";" +
+                    "-fx-icon-code: \"" + badge.icon().getDescription() + "\";"
+            );
 
             // Create a styled text with color
             Text textNode = new Text(badge.text());
