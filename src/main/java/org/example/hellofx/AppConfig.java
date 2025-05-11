@@ -7,7 +7,7 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class AppConfig {
 
-    public static String backendUrl = "http://localhost:8080";
+    public static String backendUrl = "https://bluemoon-resident-management-app-backend.onrender.com/";
 
     @Bean
     public RestTemplate restTemplate() {
