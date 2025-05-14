@@ -21,6 +21,11 @@ public class PhoneValidator {
         if (accountService.checkAccountExistByPhone(value)) {
             return new Validation(ValidationState.ERROR, "Số điện thoại đã được sử dụng cho tài khoản khác!");
         }
+        for (int i = 0; i < value.length(); i++) {
+            if (value.charAt(i) < '0' || value.charAt(i) > '9') {
+                return new Validation(ValidationState.ERROR, "Số điện thoại không đúng định dạng");
+            }
+        }
         return new Validation(ValidationState.OK, "OK!");
     }
 }
