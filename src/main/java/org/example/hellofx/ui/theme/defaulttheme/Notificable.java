@@ -15,7 +15,7 @@ public abstract class Notificable {
 
     protected abstract Scene getCurrentScene();
     protected void showPopUpMessage(String state, String message) {
-        StackPane tmp = (StackPane) getCurrentScene().lookup("StackPane");
+        StackPane tmp = (StackPane) getCurrentScene().lookup("#container StackPane");
         StackPane rightFrame = tmp;
         if (info == null) {
             info = new Notification(message);
