@@ -69,8 +69,14 @@ public class PaymentService {
         restTemplate.postForObject(AppConfig.backendUrl + "/payment/generatepaymentsforbill", bill, Void.class);
     }
 
-    public String getBillPaymentLink(int paymentId) {
-        return restTemplate.getForObject(AppConfig.backendUrl + "/payment/getbillpaymentlink?paymentId={paymentId}", String.class, paymentId);
+    public byte[] getBillPaymentLink(int paymentId) {
+//        return restTemplate.getForObject(AppConfig.backendUrl + "/payment/getbillpaymentlink?paymentId={paymentId}", String.class, paymentId);
+        byte[] qrImage = restTemplate.getForObject(
+                AppConfig.backendUrl + "/payment/getbillpaymentlink?paymentId={id}",
+                byte[].class,
+                paymentId
+        );
+        return qrImage;
     }
 
     public List<InvoiceItem> getReceipt(Integer paymentId) {

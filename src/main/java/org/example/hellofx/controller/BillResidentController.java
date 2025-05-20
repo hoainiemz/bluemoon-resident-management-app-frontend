@@ -43,7 +43,7 @@ public class BillResidentController {
         return theme.getScene(billId, scene);
     }
 
-    public String getBillPaymentLink(Integer paymentId) {
+    public byte[] getBillPaymentLink(Integer paymentId) {
         return paymentService.getBillPaymentLink(paymentId);
     }
 

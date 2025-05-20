@@ -1,6 +1,7 @@
 package org.example.hellofx.controller;
 
 import org.example.hellofx.model.*;
+import org.example.hellofx.model.enums.AccountType;
 import org.example.hellofx.service.FeedbackService;
 import org.example.hellofx.service.NoticementService;
 import org.example.hellofx.service.NotificationService;
@@ -138,6 +139,9 @@ public class HomeController{
     }
 
     public int getNumNoti() {
-        return noticementService.countUnwatchedByResidentId(getResident().getResidentId());
+        if (profileController.getProfile().getRole() == AccountType.Resident) {
+            return noticementService.countUnwatchedByResidentId(getResident().getResidentId());
+        }
+        return getFeedbackList(true).size();
     }
 }

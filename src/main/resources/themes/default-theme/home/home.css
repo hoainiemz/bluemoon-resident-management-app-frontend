@@ -678,3 +678,39 @@ VerticleTextAndTextArea .editable-text-field {
     -fx-cursor: hand;
     -fx-padding: 8 20 8 20;
 }
+
+.pencil-icon {
+    -fx-icon-color: #228af2;
+    -fx-cursor: hand;
+}
+
+.pencil-icon:hover {
+    -fx-icon-color: #2980b9;
+}
+
+.trash-icon {
+    -fx-icon-color: #c0392b;
+    -fx-cursor: hand;
+}
+
+.trash-icon:hover {
+    -fx-icon-color: #e74c3c;
+}
+
+.pay-icon {
+    -fx-icon-color: #f1c40f; /* màu vàng */
+    -fx-cursor: hand;
+}
+
+.pay-icon:hover {
+    -fx-icon-color: #f39c12; /* vàng đậm hơn khi hover */
+}
+
+.receipt-icon {
+    -fx-icon-color: #2ecc71; /* màu xanh lá cây */
+    -fx-cursor: hand;
+}
+
+.receipt-icon:hover {
+    -fx-icon-color: #27ae60; /* xanh đậm hơn khi hover */
+}

@@ -30,6 +30,7 @@ public class ForgotPasswordController {
     }
 
     public String sendResetMail(String email) {
+
         String code = generator.generate6DigitCode();
         emailService.sendSimpleEmail(email, "Mã xác nhận lấy lại mật khẩu Bluemoon Resident Management", code + " là mã xác nhận của bạn");
         return code;

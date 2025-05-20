@@ -40,6 +40,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.ByteArrayInputStream;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -429,8 +430,11 @@ public class BillResidentScene implements ThemeScene {
         popupButtons.getChildren().addAll(quit);
 
         try {
-            Image qrImage = QRUtil.generateQRCode(controller.getBillPaymentLink(paymentId), 200, 200);
+            Image qrImage = new Image(new ByteArrayInputStream(controller.getBillPaymentLink(paymentId)));
+//            Image qrImage = QRUtil.generateQRCode(controller.getBillPaymentLink(paymentId), 200, 200);
             ImageView qrView = new ImageView(qrImage);
+            qrView.setFitHeight(200);
+            qrView.setPreserveRatio(true);
 
             Label popupMessage = new Label("Đây là qr");
             popupMessage.setStyle("-fx-font-size: 14px; -fx-text-alignment: center;");

@@ -479,6 +479,7 @@ public class HomeScene implements ThemeScene {
                 var mess = new Message(item.getTitle(), item.getContent(), null);
                 mess.setOnMouseClicked(event -> {
                     Feedback feedback = new Feedback(item.getResidentId(), item.getTitle(), item.getContent());
+                    feedback.setType(item.getType());
                     feedback.setFeedbackId(item.getFeedbackId());
                     feedback.setWatched(true);
 
