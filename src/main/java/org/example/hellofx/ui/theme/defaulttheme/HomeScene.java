@@ -215,6 +215,7 @@ public class HomeScene implements ThemeScene {
         });
         profileDropDownContent.getChildren().get(3).setOnMouseClicked(event -> {
             Platform.exit();
+            System.exit(0);
         });
         profileDropDownContent.setPrefWidth(ScreenUtils.getScreenWidth() * 0.2);
 
@@ -443,11 +444,22 @@ public class HomeScene implements ThemeScene {
         });
     }
 
+
+    public void resetNumNoti() {
+        // Ensure this method can be called from any thread
+        Platform.runLater(() -> {
+            if (controller.getProfile() == null) {
+                return;
+            }
+            int numNoti = controller.getNumNoti();
+            Label badge = (Label) scene.lookup("#numNoti");
+            badge.setText(String.valueOf(numNoti));
+            badge.setVisible(numNoti > 0);
+        });
+    }
+
     private void updateNotificationList() {
-        int numNoti = controller.getNumNoti();
-        Label badge = (Label) scene.lookup("#numNoti");
-        badge.setText(String.valueOf(numNoti));
-        badge.setVisible(numNoti > 0);
+        resetNumNoti();
         notiList.getChildren().clear();
         if (controller.getProfile().getRole() == AccountType.Resident) {
             List<NotificationItem> ls = controller.getNotificationList(controller.getResident().getResidentId(), unReadNoti.isSelected());

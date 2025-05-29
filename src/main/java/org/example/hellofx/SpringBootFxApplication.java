@@ -5,9 +5,11 @@ import org.example.hellofx.ui.JavaFxApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.awt.im.InputContext;
 
+@EnableScheduling
 @SpringBootApplication
 public class SpringBootFxApplication {
     public static ApplicationContext context;

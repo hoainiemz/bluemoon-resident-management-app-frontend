@@ -270,7 +270,10 @@ public class LoginScene extends Notificable implements ThemeScene {
         shutDownContainer.setMaxWidth(leftFrame.getPrefWidth() * 0.9);
         shutDownContainer.setMinWidth(leftFrame.getPrefWidth() * 0.9);
         shutDownButton.getStyleClass().add("shutdown-button"); // Link to CSS
-        shutDownButton.setOnAction(e -> Platform.exit()); // Closes app
+        shutDownButton.setOnAction(e -> {
+            Platform.exit();
+            System.exit(0);
+        }); // Closes app
 
 
         VBox.setVgrow(freeze, Priority.ALWAYS);
