@@ -284,9 +284,11 @@ public class HomeScene implements ThemeScene {
         taoKhoanThu.getStyleClass().add("menu-sub-button");
         Button quanLyKhoanThu = new Button("Quản lý khoản thu");
         quanLyKhoanThu.getStyleClass().add("menu-sub-button");
+        Button khoanThuScheduler = new Button("Các khoản phí định kỳ");
+        khoanThuScheduler.getStyleClass().add("menu-sub-button");
         khoanThuContainer.getChildren().addAll(khoanThu);
         if (controller.getProfile().getRole() != AccountType.Resident) {
-            khoanThuContainer.getChildren().addAll(quanLyKhoanThu);
+            khoanThuContainer.getChildren().addAll(quanLyKhoanThu, khoanThuScheduler);
         }
         else {
             khoanThuContainer.getChildren().addAll(danhSachKhoanThu);
@@ -300,6 +302,9 @@ public class HomeScene implements ThemeScene {
         quanLyKhoanThu.setOnAction(event -> {
             controller.quanLyKhoanThuClicked();
         });
+        khoanThuScheduler.setOnAction(event -> {
+            controller.khoanThuSchedulerClicked();
+        });
 
         // thong bao
         VBox thongBaoContainer = new VBox();
@@ -309,6 +314,8 @@ public class HomeScene implements ThemeScene {
         taoThongBao.getStyleClass().add("menu-sub-button");
         Button quanLyThongBao = new Button("Quản lý thông báo");
         quanLyThongBao.getStyleClass().add("menu-sub-button");
+        Button thongbaoScheduler = new Button("Thông báo định kỳ");
+        thongbaoScheduler.getStyleClass().add("menu-sub-button");
         taoThongBao.setOnAction(event -> {
             controller.taoThongBaoClicked();
         });
@@ -316,8 +323,10 @@ public class HomeScene implements ThemeScene {
         quanLyThongBao.setOnAction(event -> {
             controller.quanLyThongBaoClicked();
         });
-
-        thongBaoContainer.getChildren().addAll(thongBao, quanLyThongBao);
+        thongbaoScheduler.setOnAction(event -> {
+            controller.thongBaoSchedulerClicked();
+        });
+        thongBaoContainer.getChildren().addAll(thongBao, quanLyThongBao, thongbaoScheduler);
 
 
         // Tien ich

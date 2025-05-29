@@ -1,20 +1,22 @@
 package org.example.hellofx.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.example.hellofx.dto.ApartmentCountDTO;
+import org.example.hellofx.dto.BillSchedulerDTO;
 import org.example.hellofx.model.*;
 import org.example.hellofx.model.enums.AccountType;
-import org.example.hellofx.service.BillService;
-import org.example.hellofx.service.PaymentService;
-import org.example.hellofx.service.ResidentService;
-import org.example.hellofx.service.SettlementService;
+import org.example.hellofx.service.*;
 import org.example.hellofx.ui.JavaFxApplication;
 import org.example.hellofx.ui.theme.defaulttheme.BillCreationScene;
+import org.example.hellofx.validator.SchedulerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 //import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +35,10 @@ public class BillCreationController{
     private PaymentService paymentService;
     @Autowired
     private SettlementService settlementService;
+    @Autowired
+    private SchedulerValidator schedulerValidator;
+    @Autowired
+    private SchedulerService schedulerService;
 
     public Account getProfile() {
         return profileController.getProfile();
@@ -55,7 +61,20 @@ public class BillCreationController{
             p.setPaymentId(null); // Ensure new inserts
         }
         paymentService.saveAllPayments(payments);
-
+    }
+    public void createButtonClicked(Bill bill, List<Integer> apartmentIds, LocalDateTime time, String cycle) {
+        bill.setDueDate(time);
+        BillSchedulerDTO schedulerDTO = new BillSchedulerDTO(bill, apartmentIds);
+        String json = null;
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        try {json = objectMapper.writeValueAsString(schedulerDTO);
+//            System.out.println(json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Scheduler scheduler = new Scheduler("Bill", json, time, cycle);
+        schedulerService.save(scheduler);
     }
 
     public void reset() {
@@ -80,4 +99,9 @@ public class BillCreationController{
         }
         return FXCollections.observableArrayList(settlementService.getApartmentsAndResidentCountBySearch(s));
     }
+
+    public Validation scheduleValidate(LocalDateTime time, String cycle) {
+        return schedulerValidator.validate(time, cycle);
+    }
+
 }

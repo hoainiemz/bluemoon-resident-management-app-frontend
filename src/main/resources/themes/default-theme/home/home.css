@@ -714,3 +714,14 @@ VerticleTextAndTextArea .editable-text-field {
 .receipt-icon:hover {
     -fx-icon-color: #27ae60; /* xanh đậm hơn khi hover */
 }
+
+.scheduler-button {
+    -fx-background-color: #fdc418; /* Material Design primary purple */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 12px 24px;
+    -fx-background-radius: 10px; /* Rounded corners */
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 3, 0, 0, 1);
+    -fx-cursor: hand;
+}

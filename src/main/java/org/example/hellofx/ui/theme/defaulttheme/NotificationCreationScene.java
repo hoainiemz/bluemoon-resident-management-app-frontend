@@ -141,6 +141,40 @@ public class NotificationCreationScene extends Notificable implements ThemeScene
         notificationInfo.getChildren().add(new VerticleTextAndTextField("Tiêu đề:", null, "enter the title of the notification", "noti-title-info", true));
         notificationInfo.getChildren().add(new VerticleTextAndTextArea("Nội dung thông báo: ", null, "enter the message of the notification", "noti-message-info", true));
 
+
+        VBox scheduler = new VBox();
+        Text schedulerText = new Text("Thông báo theo định kỳ:");
+        scheduler.getChildren().add(schedulerText);
+        scheduler.setAlignment(Pos.TOP_LEFT);
+        schedulerText.setStyle(" -fx-font-size: 25px;" +
+                "-fx-fill: black;");
+        HBox radioContainer = new HBox();
+        notificationInfo.getChildren().addAll(scheduler);
+        var group = new ToggleGroup();
+        var yesRadio = new RadioButton("Có");
+        yesRadio.setToggleGroup(group);
+        var noRadio = new RadioButton("Không");
+        noRadio.setToggleGroup(group);
+        radioContainer.getChildren().addAll(yesRadio, noRadio);
+        radioContainer.setSpacing(40);
+        radioContainer.setAlignment(Pos.CENTER_LEFT);
+        scheduler.getChildren().addAll(radioContainer);
+        noRadio.setSelected(true);
+        HBox schedulerInfo = new HBox();
+        schedulerInfo.getChildren().add(new VerticleTextAndDateTimePicker("Thời điểm tạo(yyyy-mm-dd hh:pp)", null, null, "schedule-start", true, false));
+        ComboBox<String> schedulecmb = new ComboBox<>(FXCollections.observableArrayList("Năm", "Tháng", "Ngày", "Giờ", "Phút"));
+        schedulerInfo.getChildren().add(new VerticleTextAndComboBox("Chu kỳ tạo thông báo", schedulecmb, null, "schedule-cycle", true));
+        yesRadio.setOnAction(e -> {
+            scheduler.getChildren().add(schedulerInfo);
+        });
+        noRadio.setOnAction(e -> {
+            if (scheduler.getChildren().contains(schedulerInfo)) {
+                scheduler.getChildren().remove(schedulerInfo);
+            }
+        });
+        scheduler.setSpacing(20);
+        schedulerInfo.setSpacing(20);
+
         mainContent.getChildren().add(new Separator(Orientation.HORIZONTAL));
         TextFlow section2 = new TextFlow(new Text("Đối tượng được thông báo:"));
         section2.getStyleClass().add("big-text");
@@ -245,7 +279,20 @@ public class NotificationCreationScene extends Notificable implements ThemeScene
                     ds.add(k);
                 }
             });
-            controller.createNotificationClicked(notification, ds);
+
+            if (yesRadio.isSelected()) {
+                VerticleTextAndDateTimePicker time = (VerticleTextAndDateTimePicker) mainContent.lookup("#schedule-start");
+                VerticleTextAndComboBox cycle = (VerticleTextAndComboBox) mainContent.lookup("#schedule-cycle");
+                Validation vl1 = controller.scheduleValidate(time.getDateTimePicker().getDateTimeValue(), (String) cycle.getComboBox().getValue());
+                if (!vl1.state().equals(ValidationState.OK)) {
+                    showPopUpMessage("ERROR", vl1.message());
+                    return;
+                }
+                controller.createNotificationClicked(notification, ds, time.getDateTimePicker().getDateTimeValue(), (String) cycle.getComboBox().getValue());
+            }
+            else {
+                controller.createNotificationClicked(notification, ds);
+            }
             reset();
             cancelButton.fire();
 //            controller.reset();

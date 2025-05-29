@@ -35,13 +35,19 @@ public class DateTimePicker extends DatePicker {
 
             @Override
             public LocalDate fromString(String value) {
-                if (value == null) {
+                if (value == null || value.trim().isEmpty()) {
                     dateTimeValue.set(null);
                     return null;
                 }
-                dateTimeValue.set(LocalDateTime.parse(value, formatter));
-                return dateTimeValue.get().toLocalDate();
+                try {
+                    dateTimeValue.set(LocalDateTime.parse(value, formatter));
+                    return dateTimeValue.get().toLocalDate();
+                } catch (Exception e) {
+                    // If parsing fails, return current date value and don't update dateTimeValue
+                    return getValue();
+                }
             }
+
         });
 
         // Synchronize changes to the underlying date value back to the dateTimeValue

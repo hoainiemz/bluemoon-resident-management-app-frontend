@@ -21,10 +21,9 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Callback;
 import org.example.hellofx.controller.NotificationInformationController;
-import org.example.hellofx.model.Noticement;
-import org.example.hellofx.model.NotificationItem;
-import org.example.hellofx.model.Resident;
-import org.example.hellofx.model.Validation;
+import org.example.hellofx.controller.NotificationSchedulerInformationController;
+import org.example.hellofx.dto.NotificationSchedulerDTO;
+import org.example.hellofx.model.*;
 import org.example.hellofx.model.enums.AccountType;
 import org.example.hellofx.model.enums.NotificationType;
 import org.example.hellofx.model.enums.ValidationState;
@@ -32,14 +31,14 @@ import org.example.hellofx.ui.theme.defaulttheme.myhandmadenodes.*;
 import org.kordamp.ikonli.materialdesign.MaterialDesign;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-//import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Component
-public class NotificationInformationScene extends Notificable{
+public class NotificationSchedulerInformationScene  extends Notificable{
     @Autowired
-    private NotificationInformationController controller;
+    private NotificationSchedulerInformationController controller;
 
     private Scene scene;
 
@@ -52,8 +51,9 @@ public class NotificationInformationScene extends Notificable{
     private ScrollPane scrollPane;
     private Map<Integer, SimpleBooleanProperty> selectedMapUpdater;
     private Map<Integer, SimpleStringProperty> selectedMap;
-    private NotificationItem noti;
-    private List<Noticement> oldData;
+    private NotificationSchedulerDTO noti;
+    private Scheduler scheduler;
+    private List<Integer> oldData;
 
     void reset() {
         masterData = null;
@@ -80,10 +80,11 @@ public class NotificationInformationScene extends Notificable{
         resetPagination();
     }
 
-//    @Transactional
-    public Scene getScene(Integer notiId, Scene scene) {
+    //    @Transactional
+    public Scene getScene(Integer id, Scene scene) {
         reset();
-        noti = controller.getNotificationItemById(notiId);
+        scheduler = controller.getSchedulerById(id);
+        noti = scheduler.notificationDTO();
         this.scene = scene;
         Pane container = (Pane) scene.lookup("#container");
         StackPane content = (StackPane) scene.lookup("#content");
@@ -140,13 +141,23 @@ public class NotificationInformationScene extends Notificable{
         notiType.setButtonCell(new BadgeCell()); // Set button appearance
         notiType.setCellFactory(c -> new BadgeCell()); // Set dropdown appearance
         for (int i = 0; i < badges.size(); i++) {
-            if (badges.get(i).text().equals(noti.getType())) {
+            if (badges.get(i).text().equals(noti.getNotificationItem().getType())) {
                 notiType.getSelectionModel().select(i);
             }
         }
         notificationInfo.getChildren().add(new VerticleTextAndComboBox("Loại: ", notiType, "Enter the type of notification", "noti-type-info", true));
-        notificationInfo.getChildren().add(new VerticleTextAndTextField("Tiêu đề:", noti.getTitle(), "enter the title of the notification", "noti-title-info", true));
-        notificationInfo.getChildren().add(new VerticleTextAndTextArea("Nội dung thông báo: ", noti.getMessage(), "enter the message of the notification", "noti-message-info", true));
+        notificationInfo.getChildren().add(new VerticleTextAndTextField("Tiêu đề:", noti.getNotificationItem().getTitle(), "enter the title of the notification", "noti-title-info", true));
+        notificationInfo.getChildren().add(new VerticleTextAndTextArea("Nội dung thông báo: ", noti.getNotificationItem().getMessage(), "enter the message of the notification", "noti-message-info", true));
+
+        HBox scheduleInfo = new HBox();
+        scheduleInfo.getChildren().add(new VerticleTextAndDateTimePicker("Thời điểm thông báo(yyyy-mm-dd hh:pp): ", scheduler.getNextExecution(), null, "due-info", controller.getProfile().getRole() != AccountType.Resident, true));
+
+        ComboBox<String> schedulecmb = new ComboBox<>(FXCollections.observableArrayList("Năm", "Tháng", "Ngày", "Giờ", "Phút"));
+        schedulecmb.setValue(scheduler.getCycle());
+        scheduleInfo.getChildren().add(new VerticleTextAndComboBox("Chu kỳ thông báo", schedulecmb, null, "schedule-cycle", true));
+        scheduleInfo.setSpacing(100);
+
+        notificationInfo.getChildren().add(scheduleInfo);
 
         mainContent.getChildren().add(new Separator(Orientation.HORIZONTAL));
         TextFlow section2 = new TextFlow(new Text("Đối tượng được thông báo:"));
@@ -241,38 +252,51 @@ public class NotificationInformationScene extends Notificable{
                 showPopUpMessage(vl.state().toString(), vl.message());
                 return;
             }
+            LocalDateTime time = null;
+            try {
+                time = ((VerticleTextAndDateTimePicker) scheduleInfo.lookup("#due-info")).getDateTimePicker().getDateTimeValue();
+            } catch (Exception e) {
+                showPopUpMessage(ValidationState.ERROR.toString(), "Thời điểm thông báo không hợp lệ");
+            }
+
+            if (!time.equals(scheduler.getNextExecution()) && time.isBefore(LocalDateTime.now())) {
+                showPopUpMessage(ValidationState.ERROR.toString(), "Thời điểm thông báo không được trước thời điểm hiện tại!");
+                return;
+            }
+
             NotificationType type = NotificationType.valueOf(notiType.getValue().text());
 
             NotificationItem newNoti = new NotificationItem(title, message, notiType.getValue().text());
-            newNoti.setId(noti.getId());
+            newNoti.setId(noti.getNotificationItem().getId());
+            newNoti.setCreatedAt(time);
 
-            List<Integer> dsIn = new ArrayList<>();
-            List<Integer> dsOut = new ArrayList<>();
             TreeSet<Integer> lonn = new TreeSet<>();
 
-            for (Noticement noticement : oldData) {
-                lonn.add(noticement.getResidentId());
+            String cycle = schedulecmb.getValue();
+
+            for (int i : oldData) {
+                lonn.add(i);
             }
+
             selectedMap.forEach((k, v) -> {
                 if (v.getValue().equals("Nhận")) {
                     if (!lonn.contains(k)) {
-                        dsIn.add(k);
+                        lonn.add(k);
                     }
                 }
             });
 
-            for (Noticement noticement : oldData) {
-                Integer residentId = noticement.getResidentId();
-                if (!selectedMap.get(residentId).getValue().equals("Nhận")) {
-                    dsOut.add(noticement.getNoticementId());
+            for (int i : oldData) {
+                if (!selectedMap.get(i).getValue().equals("Nhận")) {
+                    lonn.remove(i);
                 }
             }
 
-            controller.saveButtonClicked(noti, newNoti, dsIn, dsOut);
+            controller.saveButtonClicked(id, newNoti, lonn.stream().toList(), time, cycle);
 
             cancelButton.fire();
 //            reset();
-//            controller.reset(noti.getId());
+//            controller.reset(noti.getNotificationItem().getId());
 //            showPopUpMessage("Thành công", "Cập nhật thông báo thành công!");
         });
         return scene;
@@ -284,11 +308,11 @@ public class NotificationInformationScene extends Notificable{
 
         selectedMapUpdater = new TreeMap<>();
         selectedMap = new TreeMap<>();
-        oldData = controller.getNoticementsById(noti.getId());
+        oldData = noti.getResidentIds();
 
 
         for (int i = 0; i < oldData.size(); i++) {
-            selectedMap.computeIfAbsent(oldData.get(i).getResidentId(), k -> new SimpleStringProperty("Nhận"));
+            selectedMap.computeIfAbsent(oldData.get(i), k -> new SimpleStringProperty("Nhận"));
         }
         var col0 = new TableColumn<Resident, Boolean>();
         col0.setGraphic(selectAll);

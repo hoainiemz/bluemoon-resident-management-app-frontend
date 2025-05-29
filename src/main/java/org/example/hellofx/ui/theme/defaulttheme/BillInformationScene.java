@@ -263,6 +263,10 @@ public class BillInformationScene extends Notificable{
                 showPopUpMessage("ERROR", "Hạn nộp phí không được để trống!");
                 return;
             }
+            if (dueDate.isBefore(LocalDateTime.now()) && !dueDate.equals(bill.getDueDate())) {
+                showPopUpMessage("ERROR", "Hạn nộp phí không được trước thời điểm hiện tại!");
+                return;
+            }
             Bill newBill = new Bill(bill.getBillId(), amount, lateFee, dueDate, name, description, required);
 
             List<Integer> dsIn = new ArrayList<>();

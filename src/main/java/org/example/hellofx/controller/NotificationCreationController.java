@@ -1,18 +1,24 @@
 package org.example.hellofx.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import org.example.hellofx.dto.NotificationSchedulerDTO;
 import org.example.hellofx.model.*;
 import org.example.hellofx.service.NoticementService;
 import org.example.hellofx.service.NotificationService;
 import org.example.hellofx.service.ResidentService;
+import org.example.hellofx.service.SchedulerService;
 import org.example.hellofx.ui.JavaFxApplication;
 import org.example.hellofx.ui.theme.defaulttheme.NotificationCreationScene;
 import org.example.hellofx.validator.NotificationValidator;
+import org.example.hellofx.validator.SchedulerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 //import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +35,10 @@ public class NotificationCreationController{
     private ResidentService residentService;
     @Autowired
     private NotificationValidator notificationValidator;
+    @Autowired
+    private SchedulerValidator schedulerValidator;
+    @Autowired
+    private SchedulerService schedulerService;
 
     public Resident getResident() {
         return profileController.getResident();
@@ -43,36 +53,48 @@ public class NotificationCreationController{
     }
 
 //    @Transactional
-    public void createNotificationClicked(NotificationItem notification, List<Integer> ds) {
+public void createNotificationClicked(NotificationItem notification, List<Integer> ds) {
 //        System.out.println(notification.getTitle() + "\n" + notification.getMessage() + "\n" + notification.getType() + "\n" + notification.getCreatedAt());
-        int numTries = 10;
-        NotificationItem noti = null;
-        for (int i = 0; i < numTries; i++) {
-            try {
-                noti = notificationService.save(notification);
-                break;
-            }
-            catch (Exception e) {
-                continue;
-            }
+    int numTries = 10;
+    NotificationItem noti = null;
+    for (int i = 0; i < numTries; i++) {
+        try {
+            noti = notificationService.save(notification);
+            break;
         }
-        assert  noti != null;
-        Integer notiId = noti.getId();
-        List<Noticement> noticements = ds.stream()
-                .map(d -> new Noticement(null, notiId, d, false))
-                .collect(Collectors.toList());
-        for (int i = 0; i < 10; i++) {
-            try {
-                noticementService.saveAll(noticements);
-                return;
-            }
-            catch (Exception e) {
-                continue;
-            }
+        catch (Exception e) {
+            continue;
         }
     }
-    public ObservableList<Resident> residentQuery(String query) {
-        return FXCollections.observableArrayList(residentService.nativeResidentQuery(query));
+    assert  noti != null;
+    Integer notiId = noti.getId();
+    List<Noticement> noticements = ds.stream()
+            .map(d -> new Noticement(null, notiId, d, false))
+            .collect(Collectors.toList());
+    for (int i = 0; i < 10; i++) {
+        try {
+            noticementService.saveAll(noticements);
+            return;
+        }
+        catch (Exception e) {
+            continue;
+        }
+    }
+}
+    public void createNotificationClicked(NotificationItem notification, List<Integer> ds, LocalDateTime time, String cycle) {
+        notification.setCreatedAt(time);
+        NotificationSchedulerDTO schedulerDTO = new NotificationSchedulerDTO(notification, ds);
+
+        String json = null;
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        try {json = objectMapper.writeValueAsString(schedulerDTO);
+//            System.out.println(json);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Scheduler scheduler = new Scheduler("Notification", json, time, cycle);
+        schedulerService.save(scheduler);
     }
 
     public ObservableList<String> getAllHouseIds(){
@@ -88,5 +110,9 @@ public class NotificationCreationController{
     }
     public ObservableList<Resident> getResidentsByFilters(String houseNameFilter, String roleFilter, String searchFilter) {
         return FXCollections.observableArrayList(residentService.findResidentsByFilters(houseNameFilter, roleFilter, searchFilter));
+    }
+
+    public Validation scheduleValidate(LocalDateTime time, String cycle) {
+        return schedulerValidator.validate(time, cycle);
     }
 }

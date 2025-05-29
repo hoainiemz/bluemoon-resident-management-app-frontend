@@ -144,4 +144,12 @@ public class HomeController{
         }
         return getFeedbackList(true).size();
     }
+
+    public void khoanThuSchedulerClicked() {
+        JavaFxApplication.showThemeScene(BillSchedulerScene.class);
+    }
+
+    public void thongBaoSchedulerClicked() {
+        JavaFxApplication.showThemeScene(NotificationSchedulerScene.class);
+    }
 }

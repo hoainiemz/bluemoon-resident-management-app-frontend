@@ -20,26 +20,25 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Callback;
-import org.example.hellofx.controller.BillCreationController;
+import org.example.hellofx.controller.BillInformationController;
+import org.example.hellofx.controller.BillSchedulerInformationController;
 import org.example.hellofx.dto.ApartmentCountDTO;
+import org.example.hellofx.dto.BillSchedulerDTO;
 import org.example.hellofx.model.Bill;
-import org.example.hellofx.model.Validation;
+import org.example.hellofx.model.Scheduler;
+import org.example.hellofx.model.enums.AccountType;
 import org.example.hellofx.model.enums.ValidationState;
-import org.example.hellofx.ui.theme.ThemeScene;
 import org.example.hellofx.ui.theme.defaulttheme.myhandmadenodes.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @Component
-public class BillCreationScene extends Notificable implements ThemeScene {
+public class BillSchedulerInformationScene extends Notificable{
     @Autowired
-    private BillCreationController controller;
+    private BillSchedulerInformationController controller;
 
     private Scene scene;
 
@@ -51,9 +50,20 @@ public class BillCreationScene extends Notificable implements ThemeScene {
     private ScrollPane scrollPane;
     private Map<Integer, SimpleBooleanProperty> selectedMapUpdater;
     private Map<Integer, SimpleStringProperty> selectedMap;
+    private BillSchedulerDTO schedule;
+    private Scheduler scheduler;
+    private List<Integer> oldData;
 
     protected Scene getCurrentScene() {
         return scene;
+    }
+
+    void reloadTable(Scene scene) {
+        TextField searchFilter = ((TextAndTextField) ((ScrollPane) scene.lookup("ScrollPane")).getContent().lookup("#searchFilter")).getTextField();
+
+        TableView<ApartmentCountDTO> table = (TableView) scene.lookup("#resident-table");
+        masterData = controller.getApartmentsAndResidentCount(searchFilter.getText());
+        resetPagination();
     }
 
     public void reset() {
@@ -65,16 +75,9 @@ public class BillCreationScene extends Notificable implements ThemeScene {
         selectedMap = null;
     }
 
-    void reloadTable(Scene scene) {
-        TextField searchFilter = ((TextAndTextField) ((ScrollPane) scene.lookup("ScrollPane")).getContent().lookup("#searchFilter")).getTextField();
-
-        TableView<ApartmentCountDTO> table = (TableView) scene.lookup("#resident-table");
-        masterData = controller.getApartmentsAndResidentCount(searchFilter.getText());
-        resetPagination();
-    }
-
-
-    public Scene getScene(Scene scene) {
+    public Scene getScene(Integer scheid, Scene scene) {
+        scheduler = controller.findById(scheid);
+        schedule = scheduler.billDTO();
         reset();
         this.scene = scene;
         Pane container = (Pane) scene.lookup("#container");
@@ -89,7 +92,9 @@ public class BillCreationScene extends Notificable implements ThemeScene {
         mainContent.setPrefWidth(content.getPrefWidth());
         mainContent.setMinWidth(content.getPrefWidth());
         mainContent.setMaxWidth(content.getPrefWidth());
+//        mainContent.setPrefHeight(content.getPrefHeight());
         mainContent.setMinHeight(content.getPrefHeight());
+//        mainContent.setMaxHeight(content.getPrefHeight());
 
         scrollPane.setPrefWidth(content.getPrefWidth());
         scrollPane.setMinWidth(content.getPrefWidth());
@@ -100,7 +105,7 @@ public class BillCreationScene extends Notificable implements ThemeScene {
 
         mainContent.setAlignment(Pos.TOP_CENTER);
         mainContent.setId("main-content");
-        TextFlow section = new TextFlow(new Text("Tạo khoản thu:"));
+        TextFlow section = new TextFlow(new Text("Thông tin khoản thu:"));
         section.getStyleClass().add("big-text");
         mainContent.getChildren().addAll(section);
         mainContent.setPadding(new Insets(20, 20, 10, 20));
@@ -118,8 +123,8 @@ public class BillCreationScene extends Notificable implements ThemeScene {
         mainContent.setSpacing(20);
         billinfo.setSpacing(20);
 
-        billinfo.getChildren().add(new VerticleTextAndTextField("Tên khoản thu:", null, "enter the name of the bill", "bill-name-info", true));
-        billinfo.getChildren().add(new VerticleTextAndTextArea("Mô tả khoản thu: ", null, "enter the description of the bill", "bill-description-info", true));
+        billinfo.getChildren().add(new VerticleTextAndTextField("Tên khoản thu:", schedule.getBill().getContent(), "enter the name of the bill", "bill-name-info", controller.getProfile().getRole() != AccountType.Resident));
+        billinfo.getChildren().add(new VerticleTextAndTextArea("Mô tả khoản thu: ", schedule.getBill().getDescription(), "enter the description of the bill", "bill-description-info", controller.getProfile().getRole() != AccountType.Resident));
 
         HBox doubleTab = new HBox();
         billinfo.getChildren().addAll(doubleTab);
@@ -131,47 +136,35 @@ public class BillCreationScene extends Notificable implements ThemeScene {
         rightTab.setPrefWidth(doubleTab.getPrefWidth() * 0.4);
         leftTab.setAlignment(Pos.TOP_CENTER);
         rightTab.setAlignment(Pos.TOP_CENTER);
-        leftTab.getChildren().add(new VerticleTextAndTextField("Số tiền phải nộp (vnđ): ", null, "enter the amount of money", "amount-info", true, true));
-        rightTab.getChildren().add(new VerticleTextAndTextField("Phí nộp muộn (vnđ): ", null, "enter the late fee", "late-fee-info", true, true));
+        if (schedule.getBill().getAmount() != null) {
+            leftTab.getChildren().add(new VerticleTextAndTextField("Số tiền phải nộp (vnđ): ", (schedule.getBill().getAmount() != null) ? schedule.getBill().getAmount().toString() : null, "enter the amount of money", "amount-info", controller.getProfile().getRole() != AccountType.Resident, true));
+        }
+        else {
+            leftTab.getChildren().add(new VerticleTextAndTextField("Số tiền phải nộp (vnđ): ", (schedule.getBill().getAmount() != null) ? schedule.getBill().getAmount().toString() : null, "enter the amount of money", "amount-info", false, true));
+        }
+        rightTab.getChildren().add(new VerticleTextAndTextField("Phí nộp muộn (vnđ): ", (schedule.getBill().getLateFee() != null) ? schedule.getBill().getLateFee().toString() : null, "enter the late fee", "late-fee-info", controller.getProfile().getRole() != AccountType.Resident, true));
         ComboBox<String> req = new ComboBox<>(FXCollections.observableArrayList("Bắt buộc", "Không bắt buộc"));
-        leftTab.getChildren().add(new VerticleTextAndComboBox("Ràng buộc: ", req, null, "required-info", true));
-        rightTab.getChildren().add(new VerticleTextAndDateTimePicker("Hạn nộp phí(yyyy-mm-dd hh:pp): ", null, null, "due-info", true, true));
-
-        VBox scheduler = new VBox();
-        Text schedulerText = new Text("Tạo khoản thu theo định kỳ:");
-        scheduler.getChildren().add(schedulerText);
-        scheduler.setAlignment(Pos.TOP_LEFT);
-        schedulerText.setStyle(" -fx-font-size: 25px;" +
-                                "-fx-fill: black;");
-        HBox radioContainer = new HBox();
-        billinfo.getChildren().addAll(scheduler);
-        var group = new ToggleGroup();
-        var yesRadio = new RadioButton("Có");
-        yesRadio.setToggleGroup(group);
-        var noRadio = new RadioButton("Không");
-        noRadio.setToggleGroup(group);
-        radioContainer.getChildren().addAll(yesRadio, noRadio);
-        radioContainer.setSpacing(40);
-        radioContainer.setAlignment(Pos.CENTER_LEFT);
-        scheduler.getChildren().addAll(radioContainer);
-        noRadio.setSelected(true);
-        HBox schedulerInfo = new HBox();
-        schedulerInfo.getChildren().add(new VerticleTextAndDateTimePicker("Thời điểm tạo(yyyy-mm-dd hh:pp)", null, null, "schedule-start", true, false));
+        req.setValue(schedule.getBill().getRequired() ? "Bắt buộc" : "Không bắt buộc");
+        leftTab.getChildren().add(new VerticleTextAndComboBox("Ràng buộc: ", req, schedule.getBill().getRequired().toString(), "required-info", true));
         ComboBox<String> schedulecmb = new ComboBox<>(FXCollections.observableArrayList("Năm", "Tháng", "Ngày", "Giờ", "Phút"));
-        schedulerInfo.getChildren().add(new VerticleTextAndComboBox("Chu kỳ tạo khoản thu", schedulecmb, null, "schedule-cycle", true));
-        yesRadio.setOnAction(e -> {
-            scheduler.getChildren().add(schedulerInfo);
-            billinfo.lookup("#due-info").setVisible(false);
+        schedulecmb.setValue(scheduler.getCycle());
+        leftTab.getChildren().add(new VerticleTextAndComboBox("Chu kỳ tạo khoản thu", schedulecmb, null, "schedule-cycle", true));
+        if (controller.getProfile().getRole() == AccountType.Resident) {
+            req.setDisable(true);
+        }
+        rightTab.getChildren().add(new VerticleTextAndDateTimePicker("Thời điểm tạo khoản thu(yyyy-mm-dd hh:pp): ", schedule.getBill().getDueDate(), null, "due-info", controller.getProfile().getRole() != AccountType.Resident, true));
 
-        });
-        noRadio.setOnAction(e -> {
-            if (scheduler.getChildren().contains(schedulerInfo)) {
-                scheduler.getChildren().remove(schedulerInfo);
-            }
-            billinfo.lookup("#due-info").setVisible(true);
-        });
-        scheduler.setSpacing(20);
-        schedulerInfo.setSpacing(20);
+        if (controller.getProfile().getRole() == AccountType.Resident) {
+            rightTab.lookup("#due-info").setDisable(true);
+            HBox actionContainer = new HBox();
+            Button close = new Button("Đóng");
+            close.setId("close");
+            close.getStyleClass().add("cancel-button");
+            actionContainer.getChildren().addAll(close);
+            actionContainer.setAlignment(Pos.CENTER_RIGHT);
+            mainContent.getChildren().addAll(actionContainer);
+            return scene;
+        }
 
         mainContent.getChildren().add(new Separator(Orientation.HORIZONTAL));
         TextFlow section2 = new TextFlow(new Text("Đối tượng:"));
@@ -189,7 +182,6 @@ public class BillCreationScene extends Notificable implements ThemeScene {
         filter.setAlignment(Pos.CENTER_LEFT);
         mainContent.setAlignment(Pos.TOP_CENTER);
         mainContent.setSpacing(20);
-
         filter.getChildren().add(new TextAndTextField("Theo từ khóa: ", null, "Enter the search keyword", "searchFilter", true));
 
         ((TextAndTextField) ((ScrollPane) scene.lookup("ScrollPane")).getContent().lookup("#searchFilter")).getTextField().setOnAction(event -> {
@@ -222,17 +214,17 @@ public class BillCreationScene extends Notificable implements ThemeScene {
         mainContent.getChildren().addAll(table, pagination);
 
         HBox createButtonContainer = new HBox();
-        Button savebutton = new Button("Tạo khoản thu");
-        Button cancelButton = new Button("Hủy");
+        Button savebutton = new Button("Lưu");
+        Button cancelButton = new Button("Thoát");
         savebutton.setId("save-button");
-        cancelButton.getStyleClass().add("cancel-button");
         cancelButton.setId("close");
+        cancelButton.getStyleClass().add("cancel-button");
         createButtonContainer.getChildren().addAll(savebutton, cancelButton);
-        createButtonContainer.setSpacing(20);
-        createButtonContainer.setAlignment(Pos.CENTER_RIGHT);
         createButtonContainer.setPrefWidth(mainContent.getPrefWidth() * 0.9);
         createButtonContainer.setMaxWidth(mainContent.getPrefWidth() * 0.9);
         createButtonContainer.setMinWidth(mainContent.getPrefWidth() * 0.9);
+        createButtonContainer.setSpacing(20);
+        createButtonContainer.setAlignment(Pos.CENTER_RIGHT);
         savebutton.setStyle("-fx-background-color: #4abc96 !important;");
 //        mainContent.getChildren().add(new Separator(Orientation.HORIZONTAL));
         mainContent.getChildren().addAll(createButtonContainer);
@@ -245,8 +237,16 @@ public class BillCreationScene extends Notificable implements ThemeScene {
             String description = ((VerticleTextAndTextArea) mainContent.lookup("#bill-description-info")).getTextArea().getText();
             Double amount = null;
             String tmp = ((VerticleTextAndTextField) mainContent.lookup("#amount-info")).getTextField().getText();
-            if (tmp != null) {
-                amount = Double.valueOf(tmp);
+            if (tmp != null && tmp.isEmpty()) {
+                tmp = null;
+            }
+            if (schedule.getBill().getAmount() == null || tmp != null) {
+                if (tmp != null) {
+                    amount = Double.valueOf(tmp);
+                }
+                else {
+                    amount = null;
+                }
             }
             else {
                 showPopUpMessage("ERROR", "Khoản tiền phải đóng không được để trống!");
@@ -268,40 +268,36 @@ public class BillCreationScene extends Notificable implements ThemeScene {
             }
             Boolean required = tmp.equals("Bắt buộc");
             LocalDateTime dueDate = ((VerticleTextAndDateTimePicker) mainContent.lookup("#due-info")).getDateTimePicker().getDateTimeValue();
-            if (noRadio.isSelected()) {
-                if (dueDate == null) {
-                    showPopUpMessage("ERROR", "Hạn nộp phí không được để trống!");
-                    return;
-                }
-                if (dueDate.isBefore(LocalDateTime.now())) {
-                    showPopUpMessage("ERROR", "Hạn nộp phí phải sau thời điểm hiện tại ");
-                    return;
+            if (dueDate == null) {
+                showPopUpMessage("ERROR", "Thời điểm tạo khoản thu không được để trống!");
+                return;
+            }
+
+            if (dueDate.isBefore(LocalDateTime.now()) && !dueDate.equals(schedule.getBill().getDueDate())) {
+                showPopUpMessage("ERROR", "Thời điểm tạo khoản thu không được trước thời điểm hiện tại!");
+                return;
+            }
+            Bill newBill = new Bill(schedule.getBill().getBillId(), amount, lateFee, dueDate, name, description, required);
+
+            Set<Integer> ds = new TreeSet<>(oldData);
+
+            for (Integer id : oldData) {
+                if (!selectedMap.get(id).getValue().equals("Phải đóng")) {
+                    ds.remove(id);
                 }
             }
-            Bill newBill = new Bill(null, amount, lateFee, dueDate, name, description, required);
 
-            List<Integer> ds = new ArrayList<>();
+            String cycle = (String) ((VerticleTextAndComboBox) mainContent.lookup("#schedule-cycle")).getComboBox().getValue();
+
             selectedMap.forEach((k, v) -> {
                 if (v.getValue().equals("Phải đóng")) {
-                    ds.add(k);
+                    if (!ds.contains(k)) {
+                        ds.add(k);
+                    }
                 }
             });
-            if (noRadio.isSelected()) {
-                controller.createButtonClicked(newBill, ds);
-            }
-            else {
-                VerticleTextAndDateTimePicker time = (VerticleTextAndDateTimePicker) mainContent.lookup("#schedule-start");
-                VerticleTextAndComboBox cycle = (VerticleTextAndComboBox) mainContent.lookup("#schedule-cycle");
-                Validation vl = controller.scheduleValidate(time.getDateTimePicker().getDateTimeValue(), (String) cycle.getComboBox().getValue());
-                if (!vl.state().equals(ValidationState.OK)) {
-                    showPopUpMessage("ERROR", vl.message());
-                    return;
-                }
-                controller.createButtonClicked(newBill, ds, time.getDateTimePicker().getDateTimeValue(), (String) cycle.getComboBox().getValue());
-            }
+            controller.saveButtonClicked(scheid, newBill, ds.stream().toList(), cycle);
             cancelButton.fire();
-//            controller.reset();
-            showPopUpMessage("Thành công", "Tạo khoản thu thành công!");
         });
         return scene;
     }
@@ -311,6 +307,10 @@ public class BillCreationScene extends Notificable implements ThemeScene {
 
         selectedMapUpdater = new TreeMap<>();
         selectedMap = new TreeMap<>();
+        oldData = schedule.getApartmentIds();
+        for (int i = 0; i < oldData.size(); i++) {
+            selectedMap.computeIfAbsent(oldData.get(i), k -> new SimpleStringProperty("Phải đóng"));
+        }
 
         var col0 = new TableColumn<ApartmentCountDTO, Boolean>();
         col0.setGraphic(selectAll);
